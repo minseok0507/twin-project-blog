@@ -1,9 +1,8 @@
 package org.example.twinprojectblog.conmment;
 
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
 
 @Mapper
 public interface CommentMapperInter {
@@ -23,4 +22,9 @@ public interface CommentMapperInter {
      */
     @Delete("DELETE FROM comment WHERE post_id = #{postId}")
     void deleteCommentsByPostId(@Param("postId") Integer postId);
+
+
+    @Select("SELECT * from comment where post_id = #{postId}")
+    @ResultMap("commentDtoResultMap")
+    List<CommentDto> getCommentsByPostId(@Param("postId") Integer postId);
 }

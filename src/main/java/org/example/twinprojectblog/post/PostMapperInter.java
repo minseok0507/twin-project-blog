@@ -19,4 +19,8 @@ public interface PostMapperInter {
     @Select("select * from post order by created_at desc LIMIT 5;")
     @ResultMap("postResultMap")
     List<PostDto> getNewPosts();
+
+    @Select("select * from post where id = #{id}")
+    @ResultMap("postResultMap")
+    PostDto getPostById(int id);
 }
