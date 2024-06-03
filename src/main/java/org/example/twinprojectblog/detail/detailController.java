@@ -19,14 +19,13 @@ import java.util.List;
 public class detailController {
 
     private final PostMapperInter postMapperInter;
-    private final CommentMapperInter commentMapperInter;
 
     @GetMapping("detail")
     public String detail(
             @RequestParam("id") int id,
             Model model
     ) {
-
+        postMapperInter.updateViewCount(id);
         model.addAttribute("post", postMapperInter.getPostById(id));
 
         return "detail";

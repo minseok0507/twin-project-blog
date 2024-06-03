@@ -38,11 +38,12 @@ public class CommentController {
         return "Comment deleted successfully";
     }
 
-    @PostMapping("/comments/list")
+    @GetMapping("/comments/list")
     @ResponseBody
     public List<CommentDto> getComments(
             @RequestParam Integer postId
     ){
+        System.out.println(commentMapperInter.getCommentsByPostId(postId));
         return commentMapperInter.getCommentsByPostId(postId);
     }
 

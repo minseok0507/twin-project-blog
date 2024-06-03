@@ -19,6 +19,8 @@ public class CommentDto {
     private String content;
     private Timestamp createdAt;
 
+    private String username;
+
     public CommentDto(Integer postId, Integer userId, String content) {
         this.postId = postId;
         this.userId = userId;

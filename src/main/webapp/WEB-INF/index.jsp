@@ -35,6 +35,7 @@
     </style>
     <script>
         const html = [];
+        const date = [];
     </script>
 </head>
 
@@ -133,8 +134,8 @@
                     </span>
                                 <span class="text-gray-500">Minseok Jeong</span>
                             </div>
-                            <span class="text-gray-500">
-                                    <fmt:formatDate value="${post.createdAt}" pattern="MMM d, yyyy" />
+                            <span class="text-gray-500" id="date-${i.index}">
+
                             </span>
                         </div>
                         <p class="text-gray-700 line-clamp-3" id="content-${i.index}"></p>
@@ -142,46 +143,47 @@
                 </article>
                 <script>
                     html.push('${post.content}');
+                    date.push('${post.createdAt}');
                 </script>
             </c:forEach>
             <script>
             </script>
 
 
-            <article class="border rounded-lg shadow-sm overflow-hidden">
-                <img
-                        src="https://generated.vusercontent.net/placeholder.svg"
-                        alt="Blog post cover image"
-                        width="800"
-                        height="400"
-                        class="w-full h-48 object-cover"
-                        style="aspect-ratio: 800 / 400; object-fit: cover;"
-                />
-                <div class="p-6">
-                    <h2 class="text-2xl font-bold mb-2">
-                        <a class="hover:underline" href="<c:url value="/detail"/>">
-                            The Rise of Artificial Intelligence
-                        </a>
-                    </h2>
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="flex items-center gap-2">
-              <span class="relative flex shrink-0 overflow-hidden rounded-full w-6 h-6">
-                <img class="aspect-square h-full w-full" alt="Author avatar"
-                     src="https://generated.vusercontent.net/placeholder.svg"/>
-              </span>
-                            <span class="text-gray-500">Jane Smith</span>
-                        </div>
-                        <span class="text-gray-500">April 15, 2023</span>
-                    </div>
-                    <p class="text-gray-700 line-clamp-3">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl eget ultricies
-                        tincidunt,
-                        nisl nisl aliquam nisl, eget aliquam nisl nisl eget nisl. Sed euismod, nisl eget ultricies
-                        tincidunt,
-                        nisl nisl aliquam nisl, eget aliquam nisl nisl eget nisl.
-                    </p>
-                </div>
-            </article>
+<%--            <article class="border rounded-lg shadow-sm overflow-hidden">--%>
+<%--                <img--%>
+<%--                        src="https://generated.vusercontent.net/placeholder.svg"--%>
+<%--                        alt="Blog post cover image"--%>
+<%--                        width="800"--%>
+<%--                        height="400"--%>
+<%--                        class="w-full h-48 object-cover"--%>
+<%--                        style="aspect-ratio: 800 / 400; object-fit: cover;"--%>
+<%--                />--%>
+<%--                <div class="p-6">--%>
+<%--                    <h2 class="text-2xl font-bold mb-2">--%>
+<%--                        <a class="hover:underline" href="<c:url value="/detail"/>">--%>
+<%--                            The Rise of Artificial Intelligence--%>
+<%--                        </a>--%>
+<%--                    </h2>--%>
+<%--                    <div class="flex items-center gap-4 mb-4">--%>
+<%--                        <div class="flex items-center gap-2">--%>
+<%--              <span class="relative flex shrink-0 overflow-hidden rounded-full w-6 h-6">--%>
+<%--                <img class="aspect-square h-full w-full" alt="Author avatar"--%>
+<%--                     src="https://generated.vusercontent.net/placeholder.svg"/>--%>
+<%--              </span>--%>
+<%--                            <span class="text-gray-500">Jane Smith</span>--%>
+<%--                        </div>--%>
+<%--                        <span class="text-gray-500">April 15, 2023</span>--%>
+<%--                    </div>--%>
+<%--                    <p class="text-gray-700 line-clamp-3">--%>
+<%--                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl eget ultricies--%>
+<%--                        tincidunt,--%>
+<%--                        nisl nisl aliquam nisl, eget aliquam nisl nisl eget nisl. Sed euismod, nisl eget ultricies--%>
+<%--                        tincidunt,--%>
+<%--                        nisl nisl aliquam nisl, eget aliquam nisl nisl eget nisl.--%>
+<%--                    </p>--%>
+<%--                </div>--%>
+<%--            </article>--%>
 
 
         </div>
@@ -333,6 +335,16 @@
 <script>
     for (let i = 0; i < html.length; i++) {
         document.getElementById("content-"+i).textContent = new DOMParser().parseFromString(html[i], 'text/html').body.textContent.trim();
+        document.getElementById("date-"+i).textContent = formetDate(date[i]);
+    }
+
+    function formetDate(isoDateString) {
+        // Date 객체로 변환
+        const date = new Date(isoDateString);
+
+        // 옵션을 사용하여 날짜 형식을 지정
+        const options = {year: 'numeric', month: 'long', day: 'numeric'};
+        return date.toLocaleDateString('en-US', options);
     }
 </script>
 
