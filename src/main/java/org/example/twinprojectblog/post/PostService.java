@@ -3,7 +3,6 @@ package org.example.twinprojectblog.post;
 import lombok.RequiredArgsConstructor;
 import org.example.twinprojectblog.naver.NcpObjectStorageService;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
@@ -23,7 +22,6 @@ public class PostService {
 
         // 업로드된 파일의 URL을 PostDto에 설정
         postDto.setImageUrl(fileUrl);
-        postDto.setCreatedAt(LocalDateTime.now());
 
         // 데이터베이스에 저장
         postMapperInter.insertPost(postDto);
