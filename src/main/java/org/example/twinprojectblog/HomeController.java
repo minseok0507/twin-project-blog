@@ -15,6 +15,7 @@ public class HomeController {
         return "login";
     }
 
+
     @GetMapping("write")
     public String write(
             HttpServletRequest request
