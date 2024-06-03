@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,6 +18,7 @@ import java.util.Map;
 public class LoginController {
     private final UserMapperInter userMapperInter;
 
+    @Transactional
     @PostMapping("/login/action")
     public ResponseEntity<Map<String, String>> loginAction(
             @RequestParam("login_username") String login_username,
@@ -27,8 +29,11 @@ public class LoginController {
 
         if (check == 1) {
 
+            int userId = userMapperInter.findUserIdByUsername(login_username);
             HttpSession session = request.getSession();
             session.setAttribute("user", login_username);
+            session.setAttribute("userId", userId);
+
             session.setMaxInactiveInterval(60 * 60); //1시간 지속
             System.out.println(check + " " + login_username + " " + login_password);
             return ResponseEntity.ok(Map.of("message", "Success"));

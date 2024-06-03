@@ -16,10 +16,17 @@ public interface PostMapperInter {
     @ResultMap("postResultMap")
     List<PostDto> getNewPosts();
 
-    @Update("UPDATE posts SET title = #{title}, content = #{content}, image_url = #{imageUrl} WHERE id = #{postId}")
+
+    @Update("UPDATE post SET title = #{title}, content = #{content}, image_url = #{imageUrl} WHERE id = #{postId}")
     void updatePost(@Param("postId") Integer postId,
                     @Param("title") String title,
                     @Param("content") String content,
                     @Param("imageUrl") String imageUrl);
 
+    @Select("select * from post where id = #{id}")
+    @ResultMap("postResultMap")
+    PostDto getPostById(int id);
+
+    @Update("update post SET view_count = view_count + 1 where  id = #{id}")
+    void updateViewCount(int id);
 }

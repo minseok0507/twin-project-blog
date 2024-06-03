@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--
   Created by IntelliJ IDEA.
   User: minseok
@@ -26,6 +27,14 @@
     <style>
         h1, h2, h3, h4, h5, h6 {
             font-family: Yeseva One, serif;
+        }
+
+        #commentSubmitBtn {
+            color: white;
+        }
+
+        #commentSubmitBtn:hover {
+            color: black;
         }
     </style>
     <title>Title</title>
@@ -88,7 +97,7 @@
         <div class="space-y-8">
             <article class="border rounded-lg shadow-sm overflow-hidden">
                 <img
-                        src="https://generated.vusercontent.net/placeholder.svg"
+                        src="https://kr.object.ncloudstorage.com/bitcamp124/image/${post.imageUrl}"
                         alt="Blog post cover image"
                         width="800"
                         height="400"
@@ -97,54 +106,23 @@
                 />
                 <div class="p-6">
                     <%--                    본문 제목--%>
-                    <h1 class="text-3xl font-bold mb-4">The Future of Web Development</h1>
+                    <h1 class="text-3xl font-bold mb-4">${post.title}</h1>
                     <div class="flex items-center gap-4 mb-4">
                         <div class="flex items-center gap-2">
               <span class="relative flex shrink-0 overflow-hidden rounded-full w-6 h-6">
                 <img src="https://generated.vusercontent.net/placeholder.svg" alt="Author avatar"/>
-                <span class="flex h-full w-full items-center justify-center rounded-full bg-muted">JD</span>
+                <span class="flex h-full w-full items-center justify-center rounded-full bg-muted">JM</span>
               </span>
                             <%--                            본문 작성자--%>
-                            <span class="text-gray-500">John Doe</span>
+                            <span class="text-gray-500">Minseok Jeong</span>
                         </div>
                         <%--                        본문 날짜--%>
-                        <span class="text-gray-500">May 1, 2023</span>
+                        <span class="text-gray-500"><fmt:formatDate value="${post.createdAt}"
+                                                                    pattern="MMM d, yyyy"/></span>
                     </div>
                     <%--                    본문 내용--%>
                     <div class="prose prose-lg">
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl eget ultricies
-                            tincidunt,
-                            nisl nisl aliquam nisl, eget aliquam nisl nisl eget nisl. Sed euismod, nisl eget ultricies
-                            tincidunt,
-                            nisl nisl aliquam nisl, eget aliquam nisl nisl eget nisl.
-                        </p>
-                        <p>
-                            Donec euismod, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget aliquam nisl nisl
-                            eget
-                            nisl. Sed euismod, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget aliquam nisl
-                            nisl eget
-                            nisl.
-                        </p>
-                        <h2>The Rise of JavaScript</h2>
-                        <p>
-                            Sed euismod, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget aliquam nisl nisl
-                            eget nisl.
-                            Sed euismod, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget aliquam nisl nisl
-                            eget nisl.
-                        </p>
-                        <blockquote>
-                            <p>"The future of web development is in the hands of JavaScript."</p>
-                            <cite>- John Doe, Web Developer</cite>
-                        </blockquote>
-                        <h2>The Importance of Frameworks</h2>
-                        <p>
-                            Donec euismod, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget aliquam nisl nisl
-                            eget
-                            nisl. Sed euismod, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget aliquam nisl
-                            nisl eget
-                            nisl.
-                        </p>
+                        ${post.content}
                     </div>
                 </div>
 
@@ -152,7 +130,7 @@
                 <%--                댓글 container --%>
                 <div class="border-t p-6">
                     <h2 class="text-2xl font-bold mb-4">Comments</h2>
-                    <div class="space-y-4">
+                    <div class="space-y-4" id="commentList">
 
                         <%--            댓글 block --%>
                         <div class="flex items-start gap-4">
@@ -172,10 +150,16 @@
                     </div>
                     <div class="mt-6">
               <textarea
+                      id="commentContent"
                       class="flex min-h-[80px] bg-background text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full rounded-lg border border-gray-300 p-2"
                       placeholder="Write your comment..."
               ></textarea>
-                        <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 mt-2">
+                        <input type="hidden" id="userId" name="userId" value="${sessionScope.userId}">
+                        <input type="hidden" id="postId" name="postId" value="${post.id}">
+                        <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 mt-2"
+                                onclick="submitComment()"
+                                id="commentSubmitBtn"
+                        >
                             Submit
                         </button>
                     </div>
@@ -328,6 +312,89 @@
     </footer>
 </div>
 
+
+<script>
+    commentList();
+
+
+    function submitComment() {
+        const content = document.getElementById("commentContent").value;
+        const postId = document.getElementById("postId").value;
+        const userId = document.getElementById("userId").value;
+        if (content.length === 0) {
+            alert("Enter A Comment");
+            return;
+        }
+        const formData = new FormData();
+        formData.append('content', content);
+        formData.append('postId', postId);
+        formData.append('userId', userId);
+
+        console.log(postId + userId);
+        fetch('/comments', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert("Comment created successfully");
+                    document.getElementById("commentContent").value = "";
+                    commentList();
+                } else {
+                    alert("Failed to create comment");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again later.');
+            });
+    }
+
+    function commentList() {
+        fetch('/comments/list?postId=${post.id}', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                let s = "";
+                data.forEach(comment => {
+                    let innerDate = formetDate(comment.createdAt);
+                    s +=
+                        `
+                    <div class="flex items-start gap-4">
+<!--                        <span class="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10">-->
+<!--                            <span class="flex h-full w-full items-center justify-center rounded-full bg-muted">JD</span>-->
+<!--                        </span>-->
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between mb-2">
+                                <h6 class="font-black">\${comment.username}</h6>
+                                <div class="text-gray-500 text-sm">\${innerDate}</div>
+                            </div>
+                            <p>\${comment.content}</p>
+                        </div>
+                    </div>
+                    `;
+                })
+                document.getElementById("commentList").innerHTML = s;
+            })
+            .catch(error => {
+                // 에러 처리 코드
+                console.error(error);
+            });
+    }
+
+    function formetDate(isoDateString) {
+        // Date 객체로 변환
+        const date = new Date(isoDateString);
+
+        // 옵션을 사용하여 날짜 형식을 지정
+        const options = {year: 'numeric', month: 'long', day: 'numeric'};
+        return date.toLocaleDateString('en-US', options);
+    }
+</script>
 
 </body>
 </html>
