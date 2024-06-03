@@ -1,9 +1,8 @@
-package org.example.twinprojectblog.data.mapper;
+package org.example.twinprojectblog.login;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
-import org.example.twinprojectblog.login.UserDto;
 
 @Mapper
 public interface UserMapperInter {
