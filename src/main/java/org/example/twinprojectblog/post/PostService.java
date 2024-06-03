@@ -26,4 +26,17 @@ public class PostService {
         // 데이터베이스에 저장
         postMapperInter.insertPost(postDto);
     }
+
+    public void updatePost(
+            Integer postId,
+            String title,
+            String content,
+            String imageUrl) {
+
+        postMapperInter.updatePost(postId, title, content, imageUrl);
+    }
+
+
+
+
 }

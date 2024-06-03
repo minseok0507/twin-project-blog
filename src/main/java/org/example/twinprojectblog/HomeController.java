@@ -19,7 +19,6 @@ public class HomeController {
         return "detail";
     }
 
-
     @GetMapping("write")
     public String write(
             HttpServletRequest request
