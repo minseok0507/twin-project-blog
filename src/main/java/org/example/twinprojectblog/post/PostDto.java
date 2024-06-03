@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @NoArgsConstructor
 @Data
@@ -16,5 +17,6 @@ public class PostDto {
     private String title;
     private String content;
     private String imageUrl;
-    private LocalDateTime createdAt;
+    private int viewCount;
+    private Date createdAt;
 }
