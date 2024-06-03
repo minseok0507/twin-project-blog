@@ -3,7 +3,6 @@ package org.example.twinprojectblog.post;
 import lombok.RequiredArgsConstructor;
 import org.example.twinprojectblog.naver.NcpObjectStorageService;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
