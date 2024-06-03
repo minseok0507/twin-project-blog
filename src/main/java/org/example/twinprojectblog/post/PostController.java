@@ -62,6 +62,7 @@ public class PostController {
 //
 //        }
 //        postService.updatePost(postId, title, content, imageUrl);
+        //테스트용 텍스트 아무 기능 없음
 
         return new ResponseEntity<>("Post updated successfully", HttpStatus.OK);
     }
