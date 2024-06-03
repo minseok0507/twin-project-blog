@@ -14,11 +14,6 @@ public class HomeController {
     public String login() {
         return "login";
     }
-    @GetMapping("detail")
-    public String detail() {
-        return "detail";
-    }
-
 
     @GetMapping("write")
     public String write(
