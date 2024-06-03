@@ -32,7 +32,7 @@ public class NcpObjectStorageService implements ObjectStorageService {
 
     @Override
     public String uploadFile(String bucketName, String directoryPath, MultipartFile file) {
-        System.out.println("uploadFile="+file.getOriginalFilename());
+//        System.out.println("uploadFile="+file.getOriginalFilename());
 
         if (file.isEmpty()) {
             return null;
@@ -54,7 +54,6 @@ public class NcpObjectStorageService implements ObjectStorageService {
 
             //return s3.getUrl(bucketName, directoryPath + filename).toString();
             return filename;
-
         } catch (Exception e) {
             throw new RuntimeException("파일 업로드 오류", e);
         }

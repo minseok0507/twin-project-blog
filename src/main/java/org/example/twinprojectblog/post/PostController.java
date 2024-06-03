@@ -4,7 +4,9 @@ package org.example.twinprojectblog.post;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
+import org.example.twinprojectblog.data.dto.UserDto;
 import org.example.twinprojectblog.naver.NcpObjectStorageService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,23 +25,25 @@ public class PostController {
 
     private NcpObjectStorageService ncpObjectStorageService;
 
-    //내용 업로드
-    @PostMapping("upload")
-    public String uploadFile(
+    private final PostService postService;
+
+
+
+    @PostMapping("/posts")
+    public String createPost(
             @RequestParam("title") String title,
             @RequestParam("content") String content,
-            @RequestParam("file") MultipartFile file,
-            Model model){
-        try {
+//            @RequestParam("userId") Integer userId,
+            @RequestParam("file") MultipartFile file) {
 
-            String imageUrl = ncpObjectStorageService.uploadFile("bitcamp124", "/image", file);
-            model.addAttribute("imageUrl", imageUrl);
-            return "uploadSuccess";
-        } catch (Exception e) {
-            e.printStackTrace();
-            model.addAttribute("message", "File upload failed.");
-            return "uploadFailure";
-        }
+        PostDto postDto = new PostDto();
+        postDto.setTitle(title);
+        postDto.setContent(content);
+//        postDto.setUserId(userId);
+
+        postService.savePost(postDto, file);
+
+        return "Post created successfully";
     }
 
 
