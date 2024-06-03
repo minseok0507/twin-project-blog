@@ -1,4 +1,4 @@
-package org.example.twinprojectblog.data.dto;
+package org.example.twinprojectblog.login;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
