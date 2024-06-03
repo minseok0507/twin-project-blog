@@ -31,7 +31,6 @@ public class PostController {
             @RequestParam("title") String title,
             @RequestParam("content") String content,
             @RequestParam("file") MultipartFile file) {
-        System.out.println(file);
         try {
             PostDto postDto = new PostDto();
             postDto.setTitle(title);
@@ -53,11 +52,16 @@ public class PostController {
             @PathVariable Integer postId,
             @RequestParam String title,
             @RequestParam String content,
-            @RequestParam String imageUrl
+            @RequestParam("file") MultipartFile file
     ) {
-        if(!postDeleteMapperInter.findImageUrlByPostId(postId).equals(imageUrl))
-        postDeleteService.deleteImageByPostId(postId);
-        postService.updatePost(postId, title, content, imageUrl);
+        //코드 다시 작성
+        // 이미지 파일에 있는 이미지가 url이 같으면 삭제X
+        // 이미지 파일에 있는 이미지가 url이 다르면 삭제O
+//        if(!postDeleteMapperInter.findImageUrlByPostId(postId).equals(imageUrl)){
+//            postDeleteService.deleteImageByPostId(postId);
+//
+//        }
+//        postService.updatePost(postId, title, content, imageUrl);
 
         return new ResponseEntity<>("Post updated successfully", HttpStatus.OK);
     }
