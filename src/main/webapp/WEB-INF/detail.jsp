@@ -28,10 +28,12 @@
         h1, h2, h3, h4, h5, h6 {
             font-family: Yeseva One, serif;
         }
-        #commentSubmitBtn{
+
+        #commentSubmitBtn {
             color: white;
         }
-        #commentSubmitBtn:hover{
+
+        #commentSubmitBtn:hover {
             color: black;
         }
     </style>
@@ -115,7 +117,8 @@
                             <span class="text-gray-500">Minseok Jeong</span>
                         </div>
                         <%--                        본문 날짜--%>
-                        <span class="text-gray-500"><fmt:formatDate value="${post.createdAt}" pattern="MMM d, yyyy" /></span>
+                        <span class="text-gray-500"><fmt:formatDate value="${post.createdAt}"
+                                                                    pattern="MMM d, yyyy"/></span>
                     </div>
                     <%--                    본문 내용--%>
                     <div class="prose prose-lg">
@@ -127,7 +130,7 @@
                 <%--                댓글 container --%>
                 <div class="border-t p-6">
                     <h2 class="text-2xl font-bold mb-4">Comments</h2>
-                    <div class="space-y-4">
+                    <div class="space-y-4" id="commentList">
 
                         <%--            댓글 block --%>
                         <div class="flex items-start gap-4">
@@ -311,11 +314,14 @@
 
 
 <script>
-    function submitComment(){
+    commentList();
+
+
+    function submitComment() {
         const content = document.getElementById("commentContent").value;
         const postId = document.getElementById("postId").value;
         const userId = document.getElementById("userId").value;
-        if (content.length === 0){
+        if (content.length === 0) {
             alert("Enter A Comment");
             return;
         }
@@ -332,7 +338,8 @@
             .then(response => {
                 if (response.ok) {
                     alert("Comment created successfully");
-                    window.location.reload();
+                    document.getElementById("commentContent").value = "";
+                    commentList();
                 } else {
                     alert("Failed to create comment");
                 }
@@ -341,6 +348,51 @@
                 console.error('Error:', error);
                 alert('An error occurred. Please try again later.');
             });
+    }
+
+    function commentList() {
+        fetch('/comments/list?postId=${post.id}', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                let s = "";
+                data.forEach(comment => {
+                    let innerDate = formetDate(comment.createdAt);
+                    s +=
+                        `
+                    <div class="flex items-start gap-4">
+<!--                        <span class="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10">-->
+<!--                            <span class="flex h-full w-full items-center justify-center rounded-full bg-muted">JD</span>-->
+<!--                        </span>-->
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between mb-2">
+                                <h6 class="font-black">\${comment.username}</h6>
+                                <div class="text-gray-500 text-sm">\${innerDate}</div>
+                            </div>
+                            <p>\${comment.content}</p>
+                        </div>
+                    </div>
+                    `;
+                })
+                document.getElementById("commentList").innerHTML = s;
+            })
+            .catch(error => {
+                // 에러 처리 코드
+                console.error(error);
+            });
+    }
+
+    function formetDate(isoDateString) {
+        // Date 객체로 변환
+        const date = new Date(isoDateString);
+
+        // 옵션을 사용하여 날짜 형식을 지정
+        const options = {year: 'numeric', month: 'long', day: 'numeric'};
+        return date.toLocaleDateString('en-US', options);
     }
 </script>
 
