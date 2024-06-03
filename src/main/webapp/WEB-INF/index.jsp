@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--
   Created by IntelliJ IDEA.
   User: minseok
@@ -21,17 +22,23 @@
     <link href="https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Yeseva+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Yeseva+One&display=swap"
+          rel="stylesheet">
     <title>Blog</title>
     <style>
         /*body {*/
         /*    font-family: DM Serif Display, serif;*/
         /*}*/
-        h1,h2,h3,h4,h5,h6{
+        h1, h2, h3, h4, h5, h6 {
             font-family: Yeseva One, serif;
         }
     </style>
+    <script>
+        const html = [];
+    </script>
 </head>
+
+
 <body>
 
 <div class="flex flex-col min-h-screen">
@@ -102,6 +109,43 @@
         <div class="space-y-8">
 
 
+            <c:forEach items="${posts}" var="post" varStatus="i">
+                <article class="border rounded-lg shadow-sm overflow-hidden">
+                    <img
+                            src="https://kr.object.ncloudstorage.com/bitcamp124/image/${post.imageUrl}"
+                            alt="${post.imageUrl}"
+                            width="800"
+                            height="400"
+                            class="w-full h-48 object-cover"
+                            style="aspect-ratio: 800 / 400; object-fit: cover;"
+                    />
+                    <div class="p-6">
+                        <h2 class="text-2xl font-bold mb-2">
+                            <a class="hover:underline" href="<c:url value="/detail?id=${post.id}"/>">
+                                    ${post.title}
+                            </a>
+                        </h2>
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="flex items-center gap-2">
+                    <span class="relative flex shrink-0 overflow-hidden rounded-full w-6 h-6">
+                        <img class="aspect-square h-full w-full" alt="Author avatar"
+                             src="https://generated.vusercontent.net/placeholder.svg"/>
+                    </span>
+                                <span class="text-gray-500">Minseok Jeong</span>
+                            </div>
+                            <span class="text-gray-500">
+                                    <fmt:formatDate value="${post.createdAt}" pattern="MMM d, yyyy" />
+                            </span>
+                        </div>
+                        <p class="text-gray-700 line-clamp-3" id="content-${i.index}"></p>
+                    </div>
+                </article>
+                <script>
+                    html.push('${post.content}');
+                </script>
+            </c:forEach>
+            <script>
+            </script>
 
 
             <article class="border rounded-lg shadow-sm overflow-hidden">
@@ -122,23 +166,22 @@
                     <div class="flex items-center gap-4 mb-4">
                         <div class="flex items-center gap-2">
               <span class="relative flex shrink-0 overflow-hidden rounded-full w-6 h-6">
-                <img class="aspect-square h-full w-full" alt="Author avatar" src="https://generated.vusercontent.net/placeholder.svg" />
+                <img class="aspect-square h-full w-full" alt="Author avatar"
+                     src="https://generated.vusercontent.net/placeholder.svg"/>
               </span>
                             <span class="text-gray-500">Jane Smith</span>
                         </div>
                         <span class="text-gray-500">April 15, 2023</span>
                     </div>
                     <p class="text-gray-700 line-clamp-3">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl eget ultricies tincidunt,
-                        nisl nisl aliquam nisl, eget aliquam nisl nisl eget nisl. Sed euismod, nisl eget ultricies tincidunt,
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl eget ultricies
+                        tincidunt,
+                        nisl nisl aliquam nisl, eget aliquam nisl nisl eget nisl. Sed euismod, nisl eget ultricies
+                        tincidunt,
                         nisl nisl aliquam nisl, eget aliquam nisl nisl eget nisl.
                     </p>
                 </div>
             </article>
-
-
-
-
 
 
         </div>
@@ -287,6 +330,11 @@
 </div>
 
 
+<script>
+    for (let i = 0; i < html.length; i++) {
+        document.getElementById("content-"+i).textContent = new DOMParser().parseFromString(html[i], 'text/html').body.textContent.trim();
+    }
+</script>
 
 </body>
 </html>

@@ -1,9 +1,11 @@
 package org.example.twinprojectblog.post;
 
-import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 @Mapper
 public interface PostMapperInter {
@@ -13,9 +15,7 @@ public interface PostMapperInter {
             "VALUES (#{title}, #{content}, #{imageUrl})")
     void insertPost(PostDto post);
 
-    @Select("SELECT image_url FROM post WHERE id = #{postId}")
-    String getImageUrlByPostId(Integer postId);
-
-    @Delete("DELETE FROM post WHERE id = #{postId}")
-    void deletePostByPostId(Integer postId);
+    @Select("select * from post order by created_at desc LIMIT 5;")
+    @ResultMap("postResultMap")
+    List<PostDto> getNewPosts();
 }

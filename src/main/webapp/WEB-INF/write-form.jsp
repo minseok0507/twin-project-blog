@@ -40,7 +40,8 @@
             width: 100%;
             word-break: normal;
         }
-        #publish_post{
+
+        #publish_post {
             color: white;
         }
     </style>
@@ -323,14 +324,35 @@
         },
         theme: 'snow',
     });
+
     // document.getElementsByClassName("ql-editor")[0].innerHTML = "";
 
     function publishPost() {
         const title = document.getElementById("title").value;
         const content = quill.root.innerHTML;
-        const coverImage = document.getElementById("cover-image");
+        const coverImage = document.getElementById("cover-image").files[0];
 
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('content', content);
+        formData.append('file', coverImage);
 
+        fetch('/posts', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert("Post created successfully");
+                    window.location.href = '/';
+                } else {
+                    alert("Failed to create post");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again later.');
+            });
 
     }
 
