@@ -21,10 +21,27 @@
     <link href="https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Yeseva+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Yeseva+One&display=swap"
+          rel="stylesheet">
+
+
     <style>
-        h1,h2,h3,h4,h5,h6{
+        h1, h2, h3, h4, h5, h6 {
             font-family: Yeseva One, serif;
+        }
+
+        .ql-toolbar {
+            border-radius: 5px;
+            margin: 1px 0;
+            border-color: rgb(133, 146, 146);
+        }
+
+        .ql-editor {
+            width: 100%;
+            word-break: normal;
+        }
+        #publish_post{
+            color: white;
         }
     </style>
     <title>write post</title>
@@ -84,10 +101,6 @@
     <main class="container mx-auto grid grid-cols-1 md:grid-cols-[3fr_1fr] gap-8 my-8">
 
 
-
-
-
-
         <div class="space-y-8">
             <article class="border rounded-lg shadow-sm overflow-hidden">
                 <div class="p-6">
@@ -110,31 +123,17 @@
                         <div>
                             <label
                                     class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                    for="content"
+                                    for="editor"
                             >
                                 Content
                             </label>
-                            <textarea
-                                    class="flex min-h-[80px] rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full h-64"
-                                    id="content"
-                                    placeholder="Start writing your post here..."
-                            ></textarea>
+                            <div id="editor"
+                                 class="flex min-h-[80px] rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full h-64"
+                                 style="height: 500px; word-break:normal;"
+                            >
+                            </div>
                         </div>
 
-                        <div>
-                            <label
-                                    class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                    for="tags"
-                            >
-                                Tags
-                            </label>
-                            <input
-                                    class="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full"
-                                    id="tags"
-                                    placeholder="Enter tags separated by commas"
-                                    type="text"
-                            />
-                        </div>
                         <div>
                             <label
                                     class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -151,6 +150,7 @@
                         <button
                                 class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full"
                                 type="submit"
+                                id="publish_post"
                         >
                             Publish Post
                         </button>
@@ -158,14 +158,6 @@
                 </div>
             </article>
         </div>
-
-
-
-
-
-
-
-
 
 
         <div class="space-y-8">
@@ -310,13 +302,35 @@
     </footer>
 </div>
 
+<!-- Include stylesheet -->
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet"/>
 
 
+<!-- Include the Quill library -->
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+
+<!-- Initialize Quill editor -->
+<script>
+    // JavaScript
+    const quill = new Quill('#editor', {
+        modules: {
+            toolbar: [
+                ['bold', 'italic'],
+                ['link', 'blockquote', 'code-block'],
+                [{list: 'ordered'}, {list: 'bullet'}],
+            ],
+        },
+        theme: 'snow',
+    });
 
 
-
-
-
+    // var form = document.getElementById('contentForm');
+    // form.addEventListener('click', function () {
+    //     var contentInput = form.querySelector('textarea[name="content"]');
+    //     contentInput.value = quill.root.innerHTML;
+    //     console.log(contentInput.value);
+    // });
+</script>
 
 
 </body>
