@@ -33,6 +33,10 @@
         {
             color: black;
         }
+        .login_error{
+            color: red;
+            display: none;
+        }
     </style>
     <title>Title</title>
 </head>
@@ -95,6 +99,9 @@
             <div class="bg-gray-900 text-white p-6">
                 <h2 class="text-2xl font-bold mb-4">Login</h2>
                 <form class="space-y-4">
+                    <div class="login_error">
+                        Invalid username or password
+                    </div>
                     <div>
                         <label
                                 class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -226,11 +233,11 @@
                 alert("Enter your content");
                 return;
             }
-            if (isValidEmail(email)){
+            if (!isValidEmail(email)) {
                 alert("Invalid email format");
+                return;
             }
-
-                fetch('/login/regist', {
+            fetch('/login/regist', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
@@ -274,6 +281,33 @@
                 alert("Enter your content")
                 return;
             }
+
+            fetch('/login/action', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    login_username: login_username,
+                    login_password: login_password
+                })
+            })
+                .then(response => {
+                    console.log(response);
+                    if (response.ok) {
+                        // 등록 성공 처리
+                        alert("Welcome " + login_username);
+                        window.location.href = '/';
+                    } else {
+                        // 등록 실패 처리
+                        document.getElementsByClassName("login_error")[0].style.display = "block";
+                    }
+                })
+                .catch(error => {
+                    // 네트워크 오류 처리
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again later.');
+                });
 
 
         }
