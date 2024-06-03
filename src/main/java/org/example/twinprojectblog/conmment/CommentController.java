@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 public class CommentController {
@@ -35,6 +37,17 @@ public class CommentController {
         commentMapperInter.deleteCommentsById(id);
         return "Comment deleted successfully";
     }
+
+    @PostMapping("/comments/list")
+    @ResponseBody
+    public List<CommentDto> getComments(
+            @RequestParam Integer postId
+    ){
+        return commentMapperInter.getCommentsByPostId(postId);
+    }
+
+
+
 
 
 }
