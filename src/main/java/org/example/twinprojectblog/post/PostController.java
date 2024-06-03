@@ -23,17 +23,16 @@ public class PostController {
 
     private NcpObjectStorageService ncpObjectStorageService;
 
-    //이미지 파일 업로드 API
+    //내용 업로드
     @PostMapping("upload")
     public String uploadFile(
-            //title
-            //content
-            //image
+            @RequestParam("title") String title,
+            @RequestParam("content") String content,
             @RequestParam("file") MultipartFile file,
             Model model){
         try {
-            String imageUrl = ncpObjectStorageService.uploadFile("bitcamp124", "//", file);
 
+            String imageUrl = ncpObjectStorageService.uploadFile("bitcamp124", "/image", file);
             model.addAttribute("imageUrl", imageUrl);
             return "uploadSuccess";
         } catch (Exception e) {
