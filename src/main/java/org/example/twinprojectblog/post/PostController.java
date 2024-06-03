@@ -33,13 +33,11 @@ public class PostController {
     public String createPost(
             @RequestParam("title") String title,
             @RequestParam("content") String content,
-//            @RequestParam("userId") Integer userId,
             @RequestParam("file") MultipartFile file) {
 
         PostDto postDto = new PostDto();
         postDto.setTitle(title);
         postDto.setContent(content);
-//        postDto.setUserId(userId);
 
         postService.savePost(postDto, file);
 

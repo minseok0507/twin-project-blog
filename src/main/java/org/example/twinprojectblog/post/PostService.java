@@ -23,7 +23,6 @@ public class PostService {
 
         // 업로드된 파일의 URL을 PostDto에 설정
         postDto.setImageUrl(fileUrl);
-        postDto.setCreatedAt(LocalDateTime.now());
 
         // 데이터베이스에 저장
         postMapperInter.insertPost(postDto);

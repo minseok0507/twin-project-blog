@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Select;
 public interface PostMapperInter {
 
 
-    @Insert("INSERT INTO post (title, content, image_url, created_at) " +
-            "VALUES (#{title}, #{content}, #{imageUrl}, #{createdAt})")
+    @Insert("INSERT INTO post (title, content, image_url) " +
+            "VALUES (#{title}, #{content}, #{imageUrl})")
     void insertPost(PostDto post);
 }
