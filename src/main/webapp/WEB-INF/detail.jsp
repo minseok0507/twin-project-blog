@@ -95,6 +95,14 @@
 
 
         <div class="space-y-8">
+            <c:if test="${sessionScope.user == 'admin'}">
+                <div>
+                    <button class="btn btn-sm btn-danger"
+                            onclick="deletePost(${post.id})">
+                        delete
+                    </button>
+                </div>
+            </c:if>
             <article class="border rounded-lg shadow-sm overflow-hidden">
                 <img
                         src="https://kr.object.ncloudstorage.com/bitcamp124/image/${post.imageUrl}"
@@ -394,6 +402,28 @@
         const options = {year: 'numeric', month: 'long', day: 'numeric'};
         return date.toLocaleDateString('en-US', options);
     }
+
+    function deletePost(postId) {
+        fetch('/post/' + postId, {
+            method: 'DELETE'
+        })
+            .then(response => {
+                if (response.ok) {
+                    // 삭제 성공 처리
+                    console.log('Post deleted successfully');
+                    // UI 업데이트 등의 추가 작업 수행
+                    window.location.href = "/"
+                } else {
+                    // 삭제 실패 처리
+                    console.error('Failed to delete post');
+                }
+            })
+            .catch(error => {
+                // 네트워크 오류 등의 예외 처리
+                console.error('Error deleting post:', error);
+            });
+    }
+
 </script>
 
 </body>
