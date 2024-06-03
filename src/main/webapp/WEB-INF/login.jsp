@@ -21,10 +21,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Yeseva+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Yeseva+One&display=swap"
+          rel="stylesheet">
     <style>
-        h1,h2,h3,h4,h5,h6{
+        h1, h2, h3, h4, h5, h6 {
             font-family: Yeseva One, serif;
+        }
+        input[type=text],
+        input[type=password],
+        input[type=email]
+        {
+            color: black;
         }
     </style>
     <title>Title</title>
@@ -83,8 +90,6 @@
     </header>
 
 
-
-
     <main class="container max-w-lg mt-16">
         <div class="border rounded-lg shadow-sm overflow-hidden" id="login-form">
             <div class="bg-gray-900 text-white p-6">
@@ -93,34 +98,35 @@
                     <div>
                         <label
                                 class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                for="email"
+                                for="login_username"
                         >
-                            Email
+                            username
                         </label>
                         <input
                                 class="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full"
-                                type="email"
-                                id="email"
-                                placeholder="Enter your email"
+                                type="text"
+                                id="login_username"
+                                placeholder="Enter your username"
                         />
                     </div>
                     <div>
                         <label
                                 class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                for="password"
+                                for="login_password"
                         >
                             Password
                         </label>
                         <input
                                 class="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full"
                                 type="password"
-                                id="password"
+                                id="login_password"
                                 placeholder="Enter your password"
                         />
                     </div>
                     <button
                             class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full"
-                            type="submit"
+                            type="button"
+                            onclick="login()"
                     >
                         Login
                     </button>
@@ -135,19 +141,19 @@
         <div class="border rounded-lg shadow-sm overflow-hidden" id="register-form">
             <div class="bg-gray-900 text-white p-6">
                 <h2 class="text-2xl font-bold mb-4">Register</h2>
-                <form class="space-y-4">
+                <form class="space-y-4" id="registerForm">
                     <div>
                         <label
                                 class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                for="name"
+                                for="username"
                         >
-                            Name
+                            UserName
                         </label>
                         <input
                                 class="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full"
                                 type="text"
-                                id="name"
-                                placeholder="Enter your name"
+                                id="username"
+                                placeholder="Enter your username"
                         />
                     </div>
                     <div>
@@ -180,7 +186,8 @@
                     </div>
                     <button
                             class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full"
-                            type="submit"
+                            type="button"
+                            onclick="registUser()"
                     >
                         Register
                     </button>
@@ -198,18 +205,80 @@
         registerForm = document.getElementById("register-form");
         loginForm = document.getElementById("login-form");
         registerForm.style.display = "none";
-        function changeRegister(){
+
+        function changeRegister() {
             registerForm.style.display = "none";
             loginForm.style.display = "block";
         }
-        function changeLogin(){
+
+        function changeLogin() {
             registerForm.style.display = "block";
             loginForm.style.display = "none";
         }
+
+
+        function registUser() {
+            const username = document.querySelector('#username').value;
+            const email = document.querySelector('#email').value;
+            const password = document.querySelector('#password').value;
+
+            if (username === "" || email === "" || password === ""){
+                alert("Enter your content");
+                return;
+            }
+            if (isValidEmail(email)){
+                alert("Invalid email format");
+            }
+
+                fetch('/login/regist', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({
+                        username: username,
+                        email: email,
+                        password: password
+                    })
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            // 등록 성공 처리
+                            alert("ID created");
+                            window.location.href = '/login';
+                        } else {
+                            // 등록 실패 처리
+                            alert('Registration failed. Please try again.');
+                        }
+                    })
+                    .catch(error => {
+                        // 네트워크 오류 처리
+                        console.error('Error:', error);
+                        alert('An error occurred. Please try again later.');
+                    });
+        }
+
+        function isValidEmail(email) {
+            // 이메일 정규표현식
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            // 정규표현식을 사용해서 이메일 형식 검사
+            return emailRegex.test(email);
+        }
+
+        function login(){
+            const login_username = document.querySelector('#login_username').value;
+            const login_password = document.querySelector('#login_password').value;
+
+            if (login_username === "" || login_password === ""){
+                alert("Enter your content")
+                return;
+            }
+
+
+        }
+
     </script>
-
-
-
 
 
     <footer class="bg-gray-900 text-white py-6 mt-auto">
@@ -229,13 +298,6 @@
         </div>
     </footer>
 </div>
-
-
-
-
-
-
-
 
 
 </body>
