@@ -15,7 +15,7 @@ public class PostService {
     private final PostMapperInter postMapperInter;
 
     public void savePost(PostDto postDto, MultipartFile file) {
-        // S3에 파일 업로드
+        // 버킷에 파일 업로드
         String bucketName = "bitcamp124";
         String directoryPath = "image";
         String fileUrl = ncpObjectStorageService.uploadFile(bucketName, directoryPath, file);

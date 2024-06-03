@@ -63,7 +63,7 @@ public class NcpObjectStorageService implements ObjectStorageService {
     public void deleteFile(String bucketName, String directoryPath, String fileName) {
         // TODO Auto-generated method stub
         String path=directoryPath+"/"+fileName;
-        System.out.println("path="+path);
+//        System.out.println("path="+path);
         //해당 버킷에 파일이 존재하면 true 반환
         boolean isfind = s3.doesObjectExist(bucketName, path);
         System.out.println("isfind="+isfind);
@@ -73,4 +73,6 @@ public class NcpObjectStorageService implements ObjectStorageService {
             System.out.println(path+":삭제완료!");
         }
     }
+
+
 }
