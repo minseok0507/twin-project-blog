@@ -15,4 +15,6 @@ public interface PostDeleteMapperInter {
     @Select("SELECT image_url FROM post WHERE id = #{postId}")
     String findImageUrlByPostId(@Param("postId") Integer postId);
 
+
+
 }

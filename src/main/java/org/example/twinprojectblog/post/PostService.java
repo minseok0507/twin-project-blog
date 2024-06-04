@@ -18,15 +18,17 @@ public class PostService {
         // 버킷에 파일 업로드
         String bucketName = "bitcamp124";
         String directoryPath = "image";
-        String fileUrl = ncpObjectStorageService.uploadFile(bucketName, directoryPath, file);
+        String imageUrl = ncpObjectStorageService.uploadFile(bucketName, directoryPath, file);
 
-        // 업로드된 파일의 URL을 PostDto에 설정
-        postDto.setImageUrl(fileUrl);
+        // 업로드된 파일의 URL을 PostDto 넣어 주기
+        postDto.setImageUrl(imageUrl);
 
         // 데이터베이스에 저장
         postMapperInter.insertPost(postDto);
     }
 
+
+    //수정
     public void updatePost(
             Integer postId,
             String title,
@@ -35,6 +37,14 @@ public class PostService {
 
         postMapperInter.updatePost(postId, title, content, imageUrl);
     }
+    public void updtePostNotImage(
+            Integer postId,
+            String title,
+            String content
+    ) {
+        postMapperInter.updtePostNotImage(postId, title, content);
+    }
+
 
 
 
