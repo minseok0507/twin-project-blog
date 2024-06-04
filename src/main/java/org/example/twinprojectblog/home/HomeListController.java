@@ -41,4 +41,21 @@ public class HomeListController {
         return postService.getPostsPage(index);
     }
 
+    @GetMapping("/search")
+    public String search(
+            @RequestParam("search")String search,
+            Model model
+    ) {
+        List<PostDto> postDtoList = postMapperInter.getPostsBySearch(search);
+        model.addAttribute("posts", postDtoList);
+        System.out.println(postDtoList);
+        List<PostDto> popularPosts = postMapperInter.getPopularPosts();
+        model.addAttribute("popularPosts", popularPosts);
+        int postCount = postMapperInter.getPostsCount();
+        model.addAttribute("maxPage", Math.ceil(postCount/4.0));
+
+
+        return "search";
+    }
+
 }
