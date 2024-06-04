@@ -88,7 +88,7 @@
     <summary>회원 관련</summary>   
      
   **1. 회원가입 화면**   
-  ![image](src/main/resources/image/로그인화면.png)   
+  ![image](src/main/resources/image/회원가입화면.png)   
   유저의 아이디와 비밀번호를 db에 저장한다.
      
   **2. 로그인 화면**   
@@ -120,8 +120,7 @@
   <br/>   
  
    
-## 구조 및 설계   
-
+## 구조 및 설계
 
  </details>   
  <br/>    
