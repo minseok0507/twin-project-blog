@@ -20,6 +20,13 @@ public interface PostMapperInter {
     @ResultMap("postResultMap")
     List<PostDto> getPopularPosts();
 
+    @Select("select id, title from post order by created_at desc LIMIT 4 OFFSET #{offset}")
+    @ResultMap("postResultMap")
+    List<PostDto> getPostsPage(@Param("offset") int offset);
+
+    @Select("select count(*) from post")
+    int getPostsCount();
+
 
     @Update("UPDATE post SET title = #{title}, content = #{content}, image_url = #{imageUrl} WHERE id = #{postId}")
     void updatePost(@Param("postId") Integer postId,
@@ -39,6 +46,14 @@ public interface PostMapperInter {
     @Update("update post SET view_count = view_count + 1 where  id = #{id}")
     void updateViewCount(int id);
 
+
     @Select("SELECT * FROM post WHERE id = #{postId}")
     PostDto findPostById(@Param("postId") Integer postId);
+
+
+    @Select("SELECT * FROM post WHERE title LIKE CONCAT('%', #{search}, '%')")
+    @ResultMap("postResultMap")
+    List<PostDto> getPostsBySearch(@Param("search") String search);
+
+
 }

@@ -34,7 +34,7 @@
         }
     </style>
     <script>
-    const html = [];
+        const html = [];
         const date = [];
         const popDate = [];
         let pageIndex = 0;
@@ -153,6 +153,42 @@
             </script>
 
 
+            <%--            <article class="border rounded-lg shadow-sm overflow-hidden">--%>
+            <%--                <img--%>
+            <%--                        src="https://generated.vusercontent.net/placeholder.svg"--%>
+            <%--                        alt="Blog post cover image"--%>
+            <%--                        width="800"--%>
+            <%--                        height="400"--%>
+            <%--                        class="w-full h-48 object-cover"--%>
+            <%--                        style="aspect-ratio: 800 / 400; object-fit: cover;"--%>
+            <%--                />--%>
+            <%--                <div class="p-6">--%>
+            <%--                    <h2 class="text-2xl font-bold mb-2">--%>
+            <%--                        <a class="hover:underline" href="<c:url value="/detail"/>">--%>
+            <%--                            The Rise of Artificial Intelligence--%>
+            <%--                        </a>--%>
+            <%--                    </h2>--%>
+            <%--                    <div class="flex items-center gap-4 mb-4">--%>
+            <%--                        <div class="flex items-center gap-2">--%>
+            <%--              <span class="relative flex shrink-0 overflow-hidden rounded-full w-6 h-6">--%>
+            <%--                <img class="aspect-square h-full w-full" alt="Author avatar"--%>
+            <%--                     src="https://generated.vusercontent.net/placeholder.svg"/>--%>
+            <%--              </span>--%>
+            <%--                            <span class="text-gray-500">Jane Smith</span>--%>
+            <%--                        </div>--%>
+            <%--                        <span class="text-gray-500">April 15, 2023</span>--%>
+            <%--                    </div>--%>
+            <%--                    <p class="text-gray-700 line-clamp-3">--%>
+            <%--                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl eget ultricies--%>
+            <%--                        tincidunt,--%>
+            <%--                        nisl nisl aliquam nisl, eget aliquam nisl nisl eget nisl. Sed euismod, nisl eget ultricies--%>
+            <%--                        tincidunt,--%>
+            <%--                        nisl nisl aliquam nisl, eget aliquam nisl nisl eget nisl.--%>
+            <%--                    </p>--%>
+            <%--                </div>--%>
+            <%--            </article>--%>
+
+
         </div>
 
 
@@ -164,9 +200,8 @@
                             class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 flex-1 rounded-l-lg"
                             placeholder="Search blog posts..."
                             type="text"
-                            id="search-text"
                     />
-                    <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 rounded-r-lg" onclick="searchAction()" type="button">
+                    <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 rounded-r-lg">
                         <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="24"
@@ -210,8 +245,8 @@
             <div class="border rounded-lg shadow-sm p-6">
                 <h3 class="text-xl font-bold mb-4">Popular Posts</h3>
                 <ul class="space-y-4">
-                        <c:forEach items="${popularPosts}" var="post" varStatus="i">
-                    <li>
+                    <c:forEach items="${popularPosts}" var="post" varStatus="i">
+                        <li>
                             <a class="flex items-center gap-4 hover:underline" href="<c:url value="/detail?id=${post.id}"/>">
                                 <img
                                         src="https://kr.object.ncloudstorage.com/bitcamp124/image/${post.imageUrl}"
@@ -226,11 +261,11 @@
                                     <p class="text-gray-500" id="popDate-${i.index}"></p>
                                 </div>
                             </a>
-                    </li>
-                            <script>
-                                popDate.push('${post.createdAt}');
-                            </script>
-                        </c:forEach>
+                        </li>
+                        <script>
+                            popDate.push('${post.createdAt}');
+                        </script>
+                    </c:forEach>
                 </ul>
             </div>
         </div>
@@ -317,12 +352,6 @@
             return;
         }
         pageList(pageIndex);
-    }
-
-    function searchAction() {
-        var search = document.getElementById("search-text").value;
-
-        window.location.href = "/search?search=" + search;
     }
 </script>
 

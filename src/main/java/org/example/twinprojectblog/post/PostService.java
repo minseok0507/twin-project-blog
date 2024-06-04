@@ -5,6 +5,10 @@ import org.example.twinprojectblog.naver.NcpObjectStorageService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class PostService {
@@ -44,7 +48,13 @@ public class PostService {
     }
 
 
+
     public PostDto getPostById(Integer postId) {
         return postMapperInter.findPostById(postId);
     }
+    public List<PostDto> getPostsPage(int offset) {
+        return postMapperInter.getPostsPage(offset * 4);
+    }
+
+
 }
