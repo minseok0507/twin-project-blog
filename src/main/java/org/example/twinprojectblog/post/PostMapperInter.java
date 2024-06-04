@@ -56,4 +56,7 @@ public interface PostMapperInter {
     List<PostDto> getPostsBySearch(@Param("search") String search);
 
 
+    @Select("SELECT image_url FROM post WHERE id = #{postId}")
+    String findImageUrlByPostId(@Param("postId") Integer postId);
+
 }
