@@ -48,7 +48,7 @@ public class HomeListController {
     ) {
         List<PostDto> postDtoList = postMapperInter.getPostsBySearch(search);
         model.addAttribute("posts", postDtoList);
-        System.out.println(postDtoList);
+
         List<PostDto> popularPosts = postMapperInter.getPopularPosts();
         model.addAttribute("popularPosts", popularPosts);
         int postCount = postMapperInter.getPostsCount();

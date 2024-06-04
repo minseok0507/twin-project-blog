@@ -28,6 +28,11 @@ public class detailController {
         postMapperInter.updateViewCount(id);
         model.addAttribute("post", postMapperInter.getPostById(id));
 
+        List<PostDto> popularPosts = postMapperInter.getPopularPosts();
+        model.addAttribute("popularPosts", popularPosts);
+        int postCount = postMapperInter.getPostsCount();
+        model.addAttribute("maxPage", Math.ceil(postCount/4.0));
+
         return "detail";
     }
 

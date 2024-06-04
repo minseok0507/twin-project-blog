@@ -38,6 +38,11 @@
         }
     </style>
     <title>Title</title>
+    <script>
+        const popDate = [];
+        let pageIndex = 0;
+        let pageMax = ${maxPage}-1;
+    </script>
 </head>
 <body>
 
@@ -66,9 +71,24 @@
                 <a class="hover:underline" href="<c:url value="/"/>">
                     Blog
                 </a>
-                <a class="hover:underline" href="<c:url value="/login"/>">
-                    Login
-                </a>
+
+                <c:if test="${sessionScope.user == null}">
+                    <a class="hover:underline" href="<c:url value="/login"/>">
+                        Login
+                    </a>
+                </c:if>
+                <c:if test="${sessionScope.user != null}">
+                    <a class="hover:underline" href="<c:url value="/logout"/>">
+                        logout
+                    </a>
+                </c:if>
+                <c:if test="${sessionScope.user == 'admin'}">
+                    <a class="hover:underline" href="<c:url value="/write"/>">
+                        Write
+                    </a>
+                </c:if>
+
+
             </nav>
             <button class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3 md:hidden">
                 <svg
@@ -162,21 +182,23 @@
 
 
                     </div>
-                    <div class="mt-6">
+                    <c:if test="${sessionScope.user != null}">
+                        <div class="mt-6">
               <textarea
                       id="commentContent"
                       class="flex min-h-[80px] bg-background text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full rounded-lg border border-gray-300 p-2"
                       placeholder="Write your comment..."
               ></textarea>
-                        <input type="hidden" id="userId" name="userId" value="${sessionScope.userId}">
-                        <input type="hidden" id="postId" name="postId" value="${post.id}">
-                        <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 mt-2"
-                                onclick="submitComment()"
-                                id="commentSubmitBtn"
-                        >
-                            Submit
-                        </button>
-                    </div>
+                            <input type="hidden" id="userId" name="userId" value="${sessionScope.userId}">
+                            <input type="hidden" id="postId" name="postId" value="${post.id}">
+                            <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 mt-2"
+                                    onclick="submitComment()"
+                                    id="commentSubmitBtn"
+                            >
+                                Submit
+                            </button>
+                        </div>
+                    </c:if>
                 </div>
 
 
@@ -192,8 +214,10 @@
                             class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 flex-1 rounded-l-lg"
                             placeholder="Search blog posts..."
                             type="text"
+                            id="search-text"
                     />
-                    <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 rounded-r-lg">
+                    <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 rounded-r-lg"
+                            onclick="searchAction()" type="button">
                         <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="24"
@@ -218,92 +242,47 @@
                 <nav aria-label="Page navigation example" class="absolute top-[20px] right-[20px]">
                     <ul class="pagination">
                         <li class="page-item">
-                            <button class="page-link" aria-label="Previous">
+                            <button class="page-link" aria-label="Previous" onclick="pageBackBtn()">
                                 <span aria-hidden="true">&laquo;</span>
                             </button>
                         </li>
                         <li class="page-item">
-                            <button class="page-link" aria-label="Next">
+                            <button class="page-link" aria-label="Next" onclick="pageNextBtn()">
                                 <span aria-hidden="true">&raquo;</span>
                             </button>
                         </li>
                     </ul>
                 </nav>
 
-                <ul class="space-y-2">
-                    <li>
-                        <a class="hover:underline" href="#">
-                            Web Development
-                        </a>
-                    </li>
-                    <li>
-                        <a class="hover:underline" href="#">
-                            Artificial Intelligence
-                        </a>
-                    </li>
-                    <li>
-                        <a class="hover:underline" href="#">
-                            Technology Trends
-                        </a>
-                    </li>
-                    <li>
-                        <a class="hover:underline" href="#">
-                            Programming Languages
-                        </a>
-                    </li>
+                <ul class="space-y-2" id="page_list">
+
                 </ul>
             </div>
             <div class="border rounded-lg shadow-sm p-6">
                 <h3 class="text-xl font-bold mb-4">Popular Posts</h3>
                 <ul class="space-y-4">
-                    <li>
-                        <a class="flex items-center gap-4 hover:underline" href="#">
-                            <img
-                                    src="https://generated.vusercontent.net/placeholder.svg"
-                                    alt="Recent post cover image"
-                                    width="80"
-                                    height="80"
-                                    class="rounded-lg w-20 h-20 object-cover"
-                                    style="aspect-ratio: 80 / 80; object-fit: cover;"
-                            />
-                            <div>
-                                <h4 class="text-lg font-medium">The Future of Remote Work</h4>
-                                <p class="text-gray-500">May 10, 2023</p>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="flex items-center gap-4 hover:underline" href="#">
-                            <img
-                                    src="https://generated.vusercontent.net/placeholder.svg"
-                                    alt="Recent post cover image"
-                                    width="80"
-                                    height="80"
-                                    class="rounded-lg w-20 h-20 object-cover"
-                                    style="aspect-ratio: 80 / 80; object-fit: cover;"
-                            />
-                            <div>
-                                <h4 class="text-lg font-medium">The Impact of 5G Technology</h4>
-                                <p class="text-gray-500">April 25, 2023</p>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="flex items-center gap-4 hover:underline" href="#">
-                            <img
-                                    src="https://generated.vusercontent.net/placeholder.svg"
-                                    alt="Recent post cover image"
-                                    width="80"
-                                    height="80"
-                                    class="rounded-lg w-20 h-20 object-cover"
-                                    style="aspect-ratio: 80 / 80; object-fit: cover;"
-                            />
-                            <div>
-                                <h4 class="text-lg font-medium">The Rise of Sustainable Tech</h4>
-                                <p class="text-gray-500">April 1, 2023</p>
-                            </div>
-                        </a>
-                    </li>
+                    <c:forEach items="${popularPosts}" var="post" varStatus="i">
+                        <li>
+                            <a class="flex items-center gap-4 hover:underline"
+                               href="<c:url value="/detail?id=${post.id}"/>">
+                                <img
+                                        src="https://kr.object.ncloudstorage.com/bitcamp124/image/${post.imageUrl}"
+                                        alt="Recent post cover image"
+                                        width="80"
+                                        height="80"
+                                        class="rounded-lg w-20 h-20 object-cover"
+                                        style="aspect-ratio: 80 / 80; object-fit: cover;"
+                                />
+                                <div>
+                                    <h4 class="text-lg font-medium">${post.title}</h4>
+                                    <p class="text-gray-500" id="popDate-${i.index}"></p>
+                                </div>
+                            </a>
+                        </li>
+                        <script>
+                            popDate.push('${post.createdAt}');
+                        </script>
+                    </c:forEach>
                 </ul>
             </div>
         </div>
@@ -330,6 +309,9 @@
 <script>
     commentList();
 
+    for (let i = 0; i < popDate.length; i++) {
+        document.getElementById("popDate-" + i).textContent = formetDate(popDate[i]);
+    }
 
     function submitComment() {
         const content = document.getElementById("commentContent").value;
@@ -429,10 +411,64 @@
                 console.error('Error deleting post:', error);
             });
     }
-    function updatePost(postId){
+
+    function updatePost(postId) {
 
     }
 
+    function pageList(index) {
+        fetch('/list?index=' + index, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                let s = "";
+                data.forEach(post => {
+                    s +=
+                        `
+                    <li>
+                        <a class="hover:underline" href="<c:url value="/detail?id=\${post.id}"/>">
+                            \${post.title}
+                        </a>
+                    </li>
+                    `;
+                })
+                document.getElementById("page_list").innerHTML = s;
+            })
+            .catch(error => {
+                // 에러 처리 코드
+                console.error(error);
+            });
+    }
+
+    function pageBackBtn() {
+        pageIndex--;
+        if (pageIndex < 0) {
+            pageIndex = 0;
+            return;
+        }
+        pageList(pageIndex);
+    }
+
+    function pageNextBtn() {
+        pageIndex++;
+        if (pageIndex > pageMax) {
+            pageIndex = pageMax;
+            return;
+        }
+        pageList(pageIndex);
+    }
+
+    function searchAction() {
+        var search = document.getElementById("search-text").value;
+
+        window.location.href = "/search?search=" + search;
+    }
+
+    pageList(pageIndex);
 </script>
 
 </body>
