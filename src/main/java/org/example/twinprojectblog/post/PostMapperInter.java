@@ -28,9 +28,9 @@ public interface PostMapperInter {
                     @Param("imageUrl") String imageUrl);
 
     @Update("UPDATE post SET title = #{title}, content = #{content} WHERE id = #{postId}")
-    void updtePostNotImage(@Param("postId") Integer postId,
-                    @Param("title") String title,
-                    @Param("content") String content);
+    void updatePostNotImage(@Param("postId") Integer postId,
+                            @Param("title") String title,
+                            @Param("content") String content);
 
     @Select("select * from post where id = #{id}")
     @ResultMap("postResultMap")
@@ -38,4 +38,7 @@ public interface PostMapperInter {
 
     @Update("update post SET view_count = view_count + 1 where  id = #{id}")
     void updateViewCount(int id);
+
+    @Select("SELECT * FROM post WHERE id = #{postId}")
+    PostDto findPostById(@Param("postId") Integer postId);
 }
