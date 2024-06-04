@@ -22,8 +22,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class PostController {
 
     private final PostService postService;
-    private final PostDeleteService postDeleteService;
+    private final NcpObjectStorageService ncpObjectStorageService;
     private final PostDeleteMapperInter postDeleteMapperInter;
+    private final PostDeleteService postDeleteService;
 
     //게시글 생성
     @PostMapping("/posts")
@@ -55,14 +56,22 @@ public class PostController {
             @RequestParam("file") MultipartFile file
     ) {
         //코드 다시 작성
-        // 이미지 파일에 있는 이미지가 url이 같으면 삭제X
-        // 이미지 파일에 있는 이미지가 url이 다르면 삭제O
-//        if(!postDeleteMapperInter.findImageUrlByPostId(postId).equals(imageUrl)){
-//            postDeleteService.deleteImageByPostId(postId);
-//
-//        }
-//        postService.updatePost(postId, title, content, imageUrl);
-        //테스트용 텍스트 아무 기능 없음
+        // 이미지 파일이 있으면 -> 삭제 -> 업데이트
+        if(!file.isEmpty()){
+            //이미지 삭제
+            postDeleteService.deleteImageByPostId(postId);
+            //이미지 업로드
+            String bucketName = "bitcamp124";
+            String directoryPath = "/image";
+            String imageUrl = ncpObjectStorageService.uploadFile(bucketName, directoryPath, file);
+
+            //postId를 통해 제목, 내용, 이미지url 수정
+            postService.updatePost(postId, title, content, imageUrl);
+
+        } else { // 이미지 파일이 없으면 -> 제목, 내용만 수정
+            postService.updtePostNotImage(postId, title, content);
+        }
+
 
         return new ResponseEntity<>("Post updated successfully", HttpStatus.OK);
     }
