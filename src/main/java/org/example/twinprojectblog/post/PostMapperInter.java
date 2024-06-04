@@ -27,6 +27,11 @@ public interface PostMapperInter {
                     @Param("content") String content,
                     @Param("imageUrl") String imageUrl);
 
+    @Update("UPDATE post SET title = #{title}, content = #{content} WHERE id = #{postId}")
+    void updtePostNotImage(@Param("postId") Integer postId,
+                    @Param("title") String title,
+                    @Param("content") String content);
+
     @Select("select * from post where id = #{id}")
     @ResultMap("postResultMap")
     PostDto getPostById(int id);

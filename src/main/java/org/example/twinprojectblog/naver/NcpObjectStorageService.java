@@ -66,11 +66,11 @@ public class NcpObjectStorageService implements ObjectStorageService {
 //        System.out.println("path="+path);
         //해당 버킷에 파일이 존재하면 true 반환
         boolean isfind = s3.doesObjectExist(bucketName, path);
-        System.out.println("isfind="+isfind);
+//        System.out.println("isfind="+isfind);
         //존재할경우 삭제
         if(isfind) {
             s3.deleteObject(bucketName, path);
-            System.out.println(path+":삭제완료!");
+//            System.out.println(path+":삭제완료!");
         }
     }
 
