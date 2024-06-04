@@ -36,6 +36,9 @@
     <script>
         const html = [];
         const date = [];
+        const popDate = [];
+        let pageIndex = 0;
+        let pageMax = ${maxPage}-1;
     </script>
 </head>
 
@@ -223,46 +226,27 @@
                 <nav aria-label="Page navigation example" class="absolute top-[20px] right-[20px]">
                     <ul class="pagination">
                         <li class="page-item">
-                            <button class="page-link" aria-label="Previous">
+                            <button class="page-link" aria-label="Previous" onclick="pageBackBtn()">
                                 <span aria-hidden="true">&laquo;</span>
                             </button>
                         </li>
                         <li class="page-item">
-                            <button class="page-link" aria-label="Next">
+                            <button class="page-link" aria-label="Next" onclick="pageNextBtn()">
                                 <span aria-hidden="true">&raquo;</span>
                             </button>
                         </li>
                     </ul>
                 </nav>
 
-                <ul class="space-y-2">
-                    <li>
-                        <a class="hover:underline" href="#">
-                            Web Development
-                        </a>
-                    </li>
-                    <li>
-                        <a class="hover:underline" href="#">
-                            Artificial Intelligence
-                        </a>
-                    </li>
-                    <li>
-                        <a class="hover:underline" href="#">
-                            Technology Trends
-                        </a>
-                    </li>
-                    <li>
-                        <a class="hover:underline" href="#">
-                            Programming Languages
-                        </a>
-                    </li>
+                <ul class="space-y-2" id="page_list">
+
                 </ul>
             </div>
             <div class="border rounded-lg shadow-sm p-6">
                 <h3 class="text-xl font-bold mb-4">Popular Posts</h3>
                 <ul class="space-y-4">
+                        <c:forEach items="${popularPosts}" var="post" varStatus="i">
                     <li>
-                        <c:forEach items="${popularPosts}" var="post">
                             <a class="flex items-center gap-4 hover:underline" href="<c:url value="/detail?id=${post.id}"/>">
                                 <img
                                         src="https://kr.object.ncloudstorage.com/bitcamp124/image/${post.imageUrl}"
@@ -274,57 +258,14 @@
                                 />
                                 <div>
                                     <h4 class="text-lg font-medium">${post.title}</h4>
-                                    <p class="text-gray-500">May 10, 2023</p>
+                                    <p class="text-gray-500" id="popDate-${i.index}"></p>
                                 </div>
                             </a>
+                    </li>
+                            <script>
+                                popDate.push('${post.createdAt}');
+                            </script>
                         </c:forEach>
-                        <a class="flex items-center gap-4 hover:underline" href="#">
-                            <img
-                                    src="https://generated.vusercontent.net/placeholder.svg"
-                                    alt="Recent post cover image"
-                                    width="80"
-                                    height="80"
-                                    class="rounded-lg w-20 h-20 object-cover"
-                                    style="aspect-ratio: 80 / 80; object-fit: cover;"
-                            />
-                            <div>
-                                <h4 class="text-lg font-medium">The Future of Remote Work</h4>
-                                <p class="text-gray-500">May 10, 2023</p>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="flex items-center gap-4 hover:underline" href="#">
-                            <img
-                                    src="https://generated.vusercontent.net/placeholder.svg"
-                                    alt="Recent post cover image"
-                                    width="80"
-                                    height="80"
-                                    class="rounded-lg w-20 h-20 object-cover"
-                                    style="aspect-ratio: 80 / 80; object-fit: cover;"
-                            />
-                            <div>
-                                <h4 class="text-lg font-medium">The Impact of 5G Technology</h4>
-                                <p class="text-gray-500">April 25, 2023</p>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="flex items-center gap-4 hover:underline" href="#">
-                            <img
-                                    src="https://generated.vusercontent.net/placeholder.svg"
-                                    alt="Recent post cover image"
-                                    width="80"
-                                    height="80"
-                                    class="rounded-lg w-20 h-20 object-cover"
-                                    style="aspect-ratio: 80 / 80; object-fit: cover;"
-                            />
-                            <div>
-                                <h4 class="text-lg font-medium">The Rise of Sustainable Tech</h4>
-                                <p class="text-gray-500">April 1, 2023</p>
-                            </div>
-                        </a>
-                    </li>
                 </ul>
             </div>
         </div>
@@ -351,9 +292,12 @@
 
 
 <script>
+
+    pageList(pageIndex);
     for (let i = 0; i < html.length; i++) {
         document.getElementById("content-"+i).textContent = new DOMParser().parseFromString(html[i], 'text/html').body.textContent.trim();
         document.getElementById("date-"+i).textContent = formetDate(date[i]);
+        document.getElementById("popDate-"+i).textContent = formetDate(popDate[i]);
     }
 
     function formetDate(isoDateString) {
@@ -363,6 +307,51 @@
         // 옵션을 사용하여 날짜 형식을 지정
         const options = {year: 'numeric', month: 'long', day: 'numeric'};
         return date.toLocaleDateString('en-US', options);
+    }
+
+    function pageList(index){
+        fetch('/list?index='+index, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                let s = "";
+                data.forEach(post => {
+                    s +=
+                        `
+                    <li>
+                        <a class="hover:underline" href="<c:url value="/detail?id=\${post.id}"/>">
+                            \${post.title}
+                        </a>
+                    </li>
+                    `;
+                })
+                document.getElementById("page_list").innerHTML = s;
+            })
+            .catch(error => {
+                // 에러 처리 코드
+                console.error(error);
+            });
+    }
+
+    function pageBackBtn(){
+        pageIndex--;
+        if (pageIndex < 0){
+            pageIndex = 0;
+            return;
+        }
+        pageList(pageIndex);
+    }
+    function pageNextBtn(){
+        pageIndex++;
+        if (pageIndex > pageMax){
+            pageIndex = pageMax;
+            return;
+        }
+        pageList(pageIndex);
     }
 </script>
 
