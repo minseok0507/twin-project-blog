@@ -19,7 +19,9 @@ public class HomeListController {
         List<PostDto> list = postMapperInter.getNewPosts();
         model.addAttribute("posts", list);
 
-        System.out.println(list);
+        List<PostDto> popularPosts = postMapperInter.getPopularPosts();
+        model.addAttribute("popularPosts", popularPosts);
+
 
         return "index";
     }
