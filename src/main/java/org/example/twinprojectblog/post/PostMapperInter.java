@@ -16,6 +16,10 @@ public interface PostMapperInter {
     @ResultMap("postResultMap")
     List<PostDto> getNewPosts();
 
+    @Select("select id, title, image_url, view_count, created_at from post order by view_count DESC LIMIT 3;")
+    @ResultMap("postResultMap")
+    List<PostDto> getPopularPosts();
+
 
     @Update("UPDATE post SET title = #{title}, content = #{content}, image_url = #{imageUrl} WHERE id = #{postId}")
     void updatePost(@Param("postId") Integer postId,

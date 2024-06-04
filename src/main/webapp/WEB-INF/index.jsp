@@ -262,6 +262,22 @@
                 <h3 class="text-xl font-bold mb-4">Popular Posts</h3>
                 <ul class="space-y-4">
                     <li>
+                        <c:forEach items="${popularPosts}" var="post">
+                            <a class="flex items-center gap-4 hover:underline" href="<c:url value="/detail?id=${post.id}"/>">
+                                <img
+                                        src="https://kr.object.ncloudstorage.com/bitcamp124/image/${post.imageUrl}"
+                                        alt="Recent post cover image"
+                                        width="80"
+                                        height="80"
+                                        class="rounded-lg w-20 h-20 object-cover"
+                                        style="aspect-ratio: 80 / 80; object-fit: cover;"
+                                />
+                                <div>
+                                    <h4 class="text-lg font-medium">${post.title}</h4>
+                                    <p class="text-gray-500">May 10, 2023</p>
+                                </div>
+                            </a>
+                        </c:forEach>
                         <a class="flex items-center gap-4 hover:underline" href="#">
                             <img
                                     src="https://generated.vusercontent.net/placeholder.svg"
@@ -313,6 +329,8 @@
             </div>
         </div>
     </main>
+
+
     <footer class="bg-gray-900 text-white py-6 mt-auto">
         <div class="container mx-auto flex items-center justify-between">
             <p>© 2024 Blog. All rights reserved.</p>
