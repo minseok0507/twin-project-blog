@@ -5,6 +5,7 @@ import org.example.twinprojectblog.naver.NcpObjectStorageService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -43,15 +44,17 @@ public class PostService {
             String title,
             String content
     ) {
-        postMapperInter.updtePostNotImage(postId, title, content);
+        postMapperInter.updatePostNotImage(postId, title, content);
     }
 
 
+
+    public PostDto getPostById(Integer postId) {
+        return postMapperInter.findPostById(postId);
+    }
     public List<PostDto> getPostsPage(int offset) {
         return postMapperInter.getPostsPage(offset * 4);
     }
-
-
 
 
 }

@@ -101,8 +101,14 @@
                             onclick="deletePost(${post.id})">
                         delete
                     </button>
+                    <button class="btn btn-sm btn-success"
+                            onclick="window.location.href='/posts/update/${post.id}'">
+                        update
+                    </button>
                 </div>
             </c:if>
+
+
             <article class="border rounded-lg shadow-sm overflow-hidden">
                 <img
                         src="https://kr.object.ncloudstorage.com/bitcamp124/image/${post.imageUrl}"
@@ -422,6 +428,9 @@
                 // 네트워크 오류 등의 예외 처리
                 console.error('Error deleting post:', error);
             });
+    }
+    function updatePost(postId){
+
     }
 
 </script>

@@ -11,10 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
@@ -48,16 +46,17 @@ public class PostController {
 
 
     //게시글 수정
-    @PutMapping("/posts/{postId}")
+    @PutMapping("/update/{postId}")
     public ResponseEntity<String> updatePost(
             @PathVariable Integer postId,
             @RequestParam String title,
             @RequestParam String content,
-            @RequestParam("file") MultipartFile file
+            @RequestParam(value = "file", required = false) MultipartFile file
     ) {
-        //코드 다시 작성
+        System.out.println(title);
         // 이미지 파일이 있으면 -> 삭제 -> 업데이트
-        if(!file.isEmpty()){
+        if(file != null){
+
             //이미지 삭제
             postDeleteService.deleteImageByPostId(postId);
             //이미지 업로드
@@ -76,5 +75,11 @@ public class PostController {
         return new ResponseEntity<>("Post updated successfully", HttpStatus.OK);
     }
 
+    @GetMapping("/posts/update/{postId}")
+    public String showUpdatePostPage(@PathVariable Integer postId, Model model) {
+        PostDto post = postService.getPostById(postId);
+        model.addAttribute("post", post);
+        return "update";
+    }
 
 }

@@ -35,9 +35,9 @@ public interface PostMapperInter {
                     @Param("imageUrl") String imageUrl);
 
     @Update("UPDATE post SET title = #{title}, content = #{content} WHERE id = #{postId}")
-    void updtePostNotImage(@Param("postId") Integer postId,
-                    @Param("title") String title,
-                    @Param("content") String content);
+    void updatePostNotImage(@Param("postId") Integer postId,
+                            @Param("title") String title,
+                            @Param("content") String content);
 
     @Select("select * from post where id = #{id}")
     @ResultMap("postResultMap")
@@ -47,8 +47,13 @@ public interface PostMapperInter {
     void updateViewCount(int id);
 
 
+    @Select("SELECT * FROM post WHERE id = #{postId}")
+    PostDto findPostById(@Param("postId") Integer postId);
+
+
     @Select("SELECT * FROM post WHERE title LIKE CONCAT('%', #{search}, '%')")
     @ResultMap("postResultMap")
     List<PostDto> getPostsBySearch(@Param("search") String search);
+
 
 }
