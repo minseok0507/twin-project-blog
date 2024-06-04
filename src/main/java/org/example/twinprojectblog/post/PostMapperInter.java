@@ -45,4 +45,10 @@ public interface PostMapperInter {
 
     @Update("update post SET view_count = view_count + 1 where  id = #{id}")
     void updateViewCount(int id);
+
+
+    @Select("SELECT * FROM post WHERE title LIKE CONCAT('%', #{search}, '%')")
+    @ResultMap("postResultMap")
+    List<PostDto> getPostsBySearch(@Param("search") String search);
+
 }
