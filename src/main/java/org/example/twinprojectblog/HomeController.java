@@ -1,6 +1,7 @@
 package org.example.twinprojectblog;
 
 import lombok.RequiredArgsConstructor;
+import org.example.twinprojectblog.naver.NaverConfig;
 import org.example.twinprojectblog.post.PostDto;
 import org.example.twinprojectblog.post.PostMapperInter;
 import org.example.twinprojectblog.post.PostService;
@@ -17,6 +18,7 @@ import java.util.List;
 public class HomeController {
 
     private final PostMapperInter postMapperInter;
+    private final NaverConfig naverConfig;
 
     @GetMapping("/login")
     public String login() {
@@ -36,6 +38,9 @@ public class HomeController {
             model.addAttribute("popularPosts", popularPosts);
             int postCount = postMapperInter.getPostsCount();
             model.addAttribute("maxPage", Math.ceil(postCount/4.0));
+
+            String minioEndpoint = naverConfig.getEndPoint();
+            model.addAttribute("MINIO_ENDPOINT", minioEndpoint);
 
 
             return "write-form";

@@ -59,7 +59,7 @@ public class PostController {
             //이미지 삭제
 //            postDeleteService.deleteImageByPostId(postId);
             //이미지 업로드
-            String bucketName = "bitcamp124";
+            String bucketName = "team-project-blog";
             String directoryPath = "image";
             String imageUrl = ncpObjectStorageService.uploadFile(bucketName, directoryPath, file);
             System.out.println();

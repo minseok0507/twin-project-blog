@@ -41,7 +41,7 @@ public class PostDeleteService {
         //-----------------//
         // 이미지 파일 삭제
         if (imageUrl != null && !imageUrl.isEmpty()) {
-            String bucketName = "bitcamp124";
+            String bucketName = "team-project-blog";
             String directoryPath = "image";
             String fileName = imageUrl;
             ncpObjectStorageService.deleteFile(bucketName, directoryPath, fileName);

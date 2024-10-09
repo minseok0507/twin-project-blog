@@ -3,6 +3,7 @@ package org.example.twinprojectblog.detail;
 import lombok.RequiredArgsConstructor;
 import org.example.twinprojectblog.conmment.CommentDto;
 import org.example.twinprojectblog.conmment.CommentMapperInter;
+import org.example.twinprojectblog.naver.NaverConfig;
 import org.example.twinprojectblog.post.PostDto;
 import org.example.twinprojectblog.post.PostMapperInter;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,7 @@ import java.util.List;
 public class detailController {
 
     private final PostMapperInter postMapperInter;
+    private final NaverConfig naverConfig;
 
     @GetMapping("detail")
     public String detail(
@@ -28,10 +30,15 @@ public class detailController {
         postMapperInter.updateViewCount(id);
         model.addAttribute("post", postMapperInter.getPostById(id));
 
+
         List<PostDto> popularPosts = postMapperInter.getPopularPosts();
         model.addAttribute("popularPosts", popularPosts);
         int postCount = postMapperInter.getPostsCount();
         model.addAttribute("maxPage", Math.ceil(postCount/4.0));
+
+        String minioEndpoint = naverConfig.getEndPoint();
+        model.addAttribute("MINIO_ENDPOINT", minioEndpoint);
+
 
         return "detail";
     }

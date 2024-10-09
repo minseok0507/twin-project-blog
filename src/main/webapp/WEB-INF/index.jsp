@@ -116,7 +116,7 @@
             <c:forEach items="${posts}" var="post" varStatus="i">
                 <article class="border rounded-lg shadow-sm overflow-hidden">
                     <img
-                            src="https://kr.object.ncloudstorage.com/bitcamp124/image/${post.imageUrl}"
+                            src="${MINIO_ENDPOINT}/team-project-blog/image/${post.imageUrl}"
                             alt="${post.imageUrl}"
                             width="800"
                             height="400"
@@ -214,7 +214,7 @@
                     <li>
                             <a class="flex items-center gap-4 hover:underline" href="<c:url value="/detail?id=${post.id}"/>">
                                 <img
-                                        src="https://kr.object.ncloudstorage.com/bitcamp124/image/${post.imageUrl}"
+                                        src="${MINIO_ENDPOINT}/team-project-blog/image/${post.imageUrl}"
                                         alt="Recent post cover image"
                                         width="80"
                                         height="80"

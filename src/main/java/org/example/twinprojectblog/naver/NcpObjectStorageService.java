@@ -33,8 +33,9 @@ public class NcpObjectStorageService implements ObjectStorageService {
     @Override
     public String uploadFile(String bucketName, String directoryPath, MultipartFile file) {
 //        System.out.println("uploadFile="+file.getOriginalFilename());
-
+        System.out.println("NOSS upload file");
         if (file.isEmpty()) {
+            System.out.println("NOSS upload file NULL");
             return null;
         }
 
@@ -43,6 +44,7 @@ public class NcpObjectStorageService implements ObjectStorageService {
 
             ObjectMetadata objectMetadata = new ObjectMetadata();
             objectMetadata.setContentType(file.getContentType());
+            objectMetadata.setContentLength(file.getSize()); // 콘텐츠 길이를 설정합니다.
 
             PutObjectRequest objectRequest = new PutObjectRequest(
                     bucketName,
@@ -52,9 +54,12 @@ public class NcpObjectStorageService implements ObjectStorageService {
 
             s3.putObject(objectRequest);
 
+            System.out.println(filename);
+
             //return s3.getUrl(bucketName, directoryPath + filename).toString();
             return filename;
         } catch (Exception e) {
+            System.out.println("파일 업로드 오류" + e.getMessage());
             throw new RuntimeException("파일 업로드 오류", e);
         }
     }
